@@ -60,4 +60,5 @@ async function download_tag_list(keyword_list,concurrent) {
     for(let i = 0;i < keyword_list.length;i++) {
         await download(keyword_list[i],concurrent)
         await delay(delay_time)
+    }
 }
