@@ -76,3 +76,7 @@ async function download_tag_list(keyword_list,concurrent) {
         await delay(delay_time)
     }
 }
+
+//下载代码示例
+let keyword_list = ["standing","simple_background","simple_background","1girl","full_body","transparent_background","solo"]
+download_tag_list(keyword_list,2)
