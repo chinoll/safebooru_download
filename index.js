@@ -17,7 +17,6 @@ async function download_image(tags,page_count) {
         let reg = /https:\/\/cdn.donmai.us\/original\/.{2}\/.{2}\/[a-zA-Z0-9]*\.jpg/g
         let link_arr = html.match(reg)
         async.mapLimit(link_arr,link_arr.length,async (url) => {
-            console.log("download",url)
             let image_name = url.split("/")
             image_name = image_name[image_name.length - 1]
             await axios({
@@ -25,6 +24,7 @@ async function download_image(tags,page_count) {
                 url:url,
                 responseType:'arraybuffer'
             }).then((response) => {
+                console.log("download",url)
                 fs.writeFile(image_name,response.data,'binary',() => {})
             })
         },() => {
