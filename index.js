@@ -43,4 +43,16 @@ async function download(keyword,concurrent) {
         },() => {})
     }
 }
-download("standing+",5)
+async function download2(keyword) {
+    for(let i = 1;i <= 1000;i++) {
+        await download_image(keyword,page_count)
+    }
+}
+async function download_tag_list(keyword_list,concurrent) {
+    for(let i = 0;i < keyword_list.length;i++)
+        await download(keyword_list[i],concurrent)
+}
+
+//example code
+//let keyword_list = ["standing","simple_background","simple_background","1girl","full_body","transparent_background","solo"]
+//download_tag_list(keyword_list,2)
