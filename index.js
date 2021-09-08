@@ -1,11 +1,13 @@
 const axios = require("axios-extra")
-axios.defaults.maxConcurrent = 1000
+axios.defaults.maxConcurrent = 100  //请求并发数
 axios.defaults.queueOptions.retry = 3
 const cheerio = require("cheerio")
 const fs = require("fs")
-const uuid = require("node-uuid")
 const async = require("async")
 const util = require("util")
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
+const delay_time = 5000
+
 async function download_image(tags,page_count) {
     let base_url = util.format("https://safebooru.donmai.us/posts?page=%d&tags=%s",page_count,tags)
     await axios({
@@ -30,8 +32,11 @@ async function download_image(tags,page_count) {
         },() => {
             console.log(page_count,"OK")
         })
+    }).catch((error) => {
+        console.log("IP被ban")
     })
 }
+
 async function download(keyword,concurrent) {
     for(let i = 1;i <= 1000;i += concurrent) {
         let page_count = []
@@ -43,16 +48,16 @@ async function download(keyword,concurrent) {
         },() => {})
     }
 }
+
+//一次只下载一个页面
 async function download2(keyword) {
     for(let i = 1;i <= 1000;i++) {
         await download_image(keyword,page_count)
     }
 }
-async function download_tag_list(keyword_list,concurrent) {
-    for(let i = 0;i < keyword_list.length;i++)
-        await download(keyword_list[i],concurrent)
-}
 
-//example code
-//let keyword_list = ["standing","simple_background","simple_background","1girl","full_body","transparent_background","solo"]
-//download_tag_list(keyword_list,2)
+async function download_tag_list(keyword_list,concurrent) {
+    for(let i = 0;i < keyword_list.length;i++) {
+        await download(keyword_list[i],concurrent)
+        await delay(delay_time)
+}
