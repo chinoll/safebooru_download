@@ -69,4 +69,4 @@ process.argv.forEach((val, index) => {
   })
 x = x.slice(2)
 
-download(x[0],x[1],x[2],x[3],x[4])
+download(x[0],parseInt(x[1]),parseInt(x[2]),parseInt(x[3]),x[4])
