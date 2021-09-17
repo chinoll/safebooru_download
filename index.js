@@ -38,7 +38,12 @@ async function download_image(tags,page_count) {
         console.log(error)
     })
 }
-
+/*
+ *@keyword:下载的tag
+ *@concurrent:并发数量
+ *@i:从第几页开始下载
+ *@page:下载到第几页
+*/
 async function download(keyword,concurrent,i,page) {
     i--
     for(;i <= page;i += concurrent) {
