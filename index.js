@@ -5,7 +5,7 @@ const cheerio = require("cheerio")
 const fs = require("fs")
 const async = require("async")
 const util = require("util")
-async function download_image(tags,page_count) {
+async function download_image(tags,page_count,save_path) {
     let base_url = util.format("https://safebooru.org/index.php?page=post&s=list&tags=%s&pid=%d",tags,page_count*40)
     // console.log(base_url)
     await axios({
@@ -29,7 +29,7 @@ async function download_image(tags,page_count) {
                 timeout:5000
             }).then((response) => {
                 console.log("download",image_name)
-                fs.writeFile(image_name,response.data,'binary',() => {})
+                fs.writeFile(save_path + image_name,response.data,'binary',() => {})
             })
         },() => {
             console.log(page_count,"OK")
@@ -44,14 +44,14 @@ async function download_image(tags,page_count) {
  *@i:从第几页开始下载
  *@page:下载到第几页
 */
-async function download(keyword,concurrent,i,page) {
+async function download(keyword,concurrent,i,page,save_path) {
     i--
     for(;i <= page;i += concurrent) {
         let page_count = []
         for(let j = 0;j < concurrent;j++) {
             if (i + j > page)
                 break
-            page_count.push(download_image(keyword,i + j))
+            page_count.push(download_image(keyword,i + j,save_path))
         }
         await Promise.all(page_count).then((value) => {}).catch((reason) => {console.log("abort")})
     }
@@ -63,6 +63,10 @@ async function download_tag_list(keyword_list,concurrent) {
         await download(keyword_list[i],concurrent,page[i])
     }
 }
+let x = []
+process.argv.forEach((val, index) => {
+    x.push(val)
+  })
+x = x.slice(2)
 
-//下载代码示例
-download("1girl",10,1,10000)
+download(x[0],x[1],x[2],x[3],x[4])
