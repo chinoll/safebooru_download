@@ -1,5 +1,5 @@
 const axios = require("axios-extra")
-axios.defaults.maxConcurrent = 1000  //请求并发数
+axios.defaults.maxConcurrent = 100  //请求并发数
 axios.defaults.queueOptions.retry = 3
 const cheerio = require("cheerio")
 const fs = require("fs")
